@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Search</title>
+</head>
+<body>
+
+    <h1>ChatGPT Search Engine</h1>
+
+    <form onsubmit="searchChatGPT(); return false;">
+        <label for="query">Search:</label>
+        <input type="text" id="query" name="query" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        function searchChatGPT() {
+            var userInput = document.getElementById('query').value;
+            
+            // You need to replace 'your-api-key' with your actual OpenAI API key
+            var apiKey = 'your-api-key';
+
+            fetch('https://api.openai.com/v1/engines/text-davinci-003/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey,
+                },
+                body: JSON.stringify({
+                    prompt: 'User: ' + userInput + '\nChatGPT:',
+                    max_tokens: 100,  // Adjust as needed
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                var modelReply = data.choices[0].text.trim();
+                document.getElementById('result').innerText = 'ChatGPT: ' + modelReply;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+</html>
